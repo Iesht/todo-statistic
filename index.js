@@ -2,8 +2,9 @@ const {getAllFilePathsWithExtension, readFile} = require('./fileSystem');
 const {readLine} = require('./console');
 
 const files = getFiles();
-const TODOs = getTODOs();
 const importantTODOs = {}
+const userTODOs = {}
+const TODOs = getTODOs();
 
 console.log('Please, write your command!');
 readLine(processCommand);
@@ -27,16 +28,16 @@ function getTODOs() {
 }
 
 function processCommand(command) {
-    switch (command) {
-        case 'exit':
+    switch (true) {
+        case command === 'exit':
             process.exit(0);
             break;
-        case 'show':
+        case command === 'show':
             for (const todo of TODOs) {
                 console.log(todo);
             }
             break;
-        case 'important':
+        case command === 'important':
             const sortedKeys = Object.keys(importantTODOs).sort((a, b) => b - a);
 
             for (const key of sortedKeys) {
@@ -44,6 +45,16 @@ function processCommand(command) {
                 for (const task of tasks) {
                     console.log(task);
                 }
+            }
+            break;
+        case command.startsWith('user'):
+            let user = command.slice(5);
+            if (userTODOs.includes(user)){
+                for (const todo of userTODOs[user]) {
+                    console.log(todo);
+                }
+            } else {
+                console.log(`нет todo с юзером ${user}`);
             }
             break;
         default:
